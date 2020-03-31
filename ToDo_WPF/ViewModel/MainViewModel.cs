@@ -14,11 +14,9 @@ namespace ToDo_WPF.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private ObservableCollection<ToDoViewModel> _items;
-
-        public MainViewModel()
-        {
-
-        }
+        public string Titre { get; set; }
+        public string Des { get; set; }
+        public bool Etat { get; set; }
 
         public ObservableCollection<ToDoViewModel> Items
         {
@@ -26,25 +24,45 @@ namespace ToDo_WPF.ViewModel
             {
                 return _items ??= LoadItems();
             }
+            set
+            {
+                if(_items != value)
+                {
+                    _items = value;
+                    RaisePropertyChanged(nameof(Items));
+                }
+            }
         }
 
 
         private ObservableCollection<ToDoViewModel> LoadItems()
         {
 
-            return new ObservableCollection<ToDoViewModel>(Get<List<ToDo>>("https://localhost:44316/api/", "ToDo/").Select(td => new ToDoViewModel(td)));
+            return new ObservableCollection<ToDoViewModel>(APIConsume.Instance.Get<List<ToDo>>("https://localhost:44316/api/", "ToDo/").Select(td => new ToDoViewModel(td)));
         }
 
-        public T Get<T>(string ui, string action, int? id = null)
+        private RelayCommand _ajoutCommand;
+
+        public RelayCommand AjoutCommand
         {
-            HttpController http = new HttpController(ui);
+            get { return _ajoutCommand ?? (_ajoutCommand = new RelayCommand(Ajout)); }
 
-            HttpResponseMessage message = http.Client.GetAsync(action + id).Result;
-            message.EnsureSuccessStatusCode();
-            string json = message.Content.ReadAsStringAsync().Result;
-
-            return JsonConvert.DeserializeObject<T>(json);
         }
+                
+        private void Ajout()
+         {
+            ToDo td = new ToDo
+            {
+                Title = Titre,
+                Descr = Des,
+                State = Etat,
+            };
+
+            APIConsume.Instance.Post<ToDo>("https://localhost:44316/api/", "ToDo/", td);
+            Items = LoadItems();
+            //RaisePropertyChanged(nameof(Items));
+            //Items.Add(new ToDoViewModel(td));
+        }        
        
     }
 }
