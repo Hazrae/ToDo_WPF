@@ -84,21 +84,15 @@ namespace ToDo_DAL.Services
                 {
                     //creation de la liste en bouclant sur le DR
                     while (dr.Read())
-                    {
-                        DateTime? checkDate;
-                        if (!(dr["ValidationDate"] is DBNull))
-                            checkDate = Convert.ToDateTime(dr["validationDate"]);
-                        else
-                            checkDate = null;
+                    {                   
 
                         list.Add(new ToDo
                         {
                             Id = (int)dr["id"],
                             Title = dr["title"].ToString(),
                             Descr = dr["descr"].ToString(),
-                            State = (bool)dr["state"],
-                            ValidationDate = checkDate,
-                            //ValidationDate = (!(dr["ValidationDate"] is DBNull)) ? Convert.ToDateTime(dr["validationDate"]) : null
+                            State = (bool)dr["state"],                         
+                            ValidationDate = (!(dr["ValidationDate"] is DBNull)) ? (DateTime?)dr["validationDate"] : null
 
                         }); ; 
                     }
@@ -128,10 +122,7 @@ namespace ToDo_DAL.Services
                     todo.Title = dr["title"].ToString();
                     todo.Descr = dr["descr"].ToString();
                     todo.State = (bool)dr["state"];
-                    if (!(dr["ValidationDate"] is DBNull))
-                        todo.ValidationDate = Convert.ToDateTime(dr["validationDate"]);
-                    else
-                        todo.ValidationDate = null;
+                    todo.ValidationDate = (!(dr["ValidationDate"] is DBNull)) ? (DateTime?)dr["validationDate"] : null;
                 }
             }
             Handler.ConnecDB.Close();

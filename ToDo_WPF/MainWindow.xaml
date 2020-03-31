@@ -5,8 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToDo_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" DataContext="{StaticResource Main}">
     <Grid>
-
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <DataGrid Grid.Column="0" ItemsSource="{Binding Items}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Title" Width="*" Binding="{Binding Title}" />
+                <DataGridTextColumn Header="Description" Width="*" Binding="{Binding Descr}" />
+                <DataGridTextColumn Header="Etat" Width="*" Binding="{Binding State}" />
+                <DataGridTextColumn Header="DateValidation" Width="*" Binding="{Binding ValidationDate}" />
+            </DataGrid.Columns>          
+        </DataGrid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>                
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="Titre :" HorizontalAlignment="Center"></Label>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Titre}"></TextBox>
+            <Label Grid.Row="1" Grid.Column="0" Content="Description :" HorizontalAlignment="Center"></Label>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Descr}"></TextBox>
+            <Label Grid.Row="2" Grid.Column="0" Content="Etat" HorizontalAlignment="Center"></Label>
+            <CheckBox Grid.Row="2" Grid.Column="1"></CheckBox>
+            <Button Grid.Row="3" Grid.Column="1" Content="Insérer les données"></Button>
+        </Grid>
     </Grid>
 </Window>

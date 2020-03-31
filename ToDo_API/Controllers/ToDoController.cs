@@ -12,6 +12,17 @@ namespace ToDo_API.Controllers
 {
     public class ToDoController : ApiController
     {
+        private static ToDoController _instance;
+
+        public static ToDoController Instance
+        {
+            get 
+            {
+                _instance = _instance ?? new ToDoController();
+                return _instance;
+            }
+        }
+
         [Route("api/ToDo/")]
         public List<ToDo> GetAll()
         {
